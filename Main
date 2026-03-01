@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Millennium Online — an open-world RPG set in a reimagined 1999–2000 Sydney CBD." />
+  <title>Millennium Online</title>
+
+  <style>
+    :root{
+      --bg: #07070a;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.68);
+      --line: rgba(255,255,255,0.14);
+      --glow: rgba(120, 120, 255, 0.35);
+      --accent: #7c5cff; /* edit me */
+      --accent2:#00e5ff; /* edit me */
+      --radius: 18px;
+      --max: 1040px;
+      --shadow: 0 18px 60px rgba(0,0,0,0.55);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1000px 600px at 20% 10%, rgba(124,92,255,0.22), transparent 55%),
+        radial-gradient(900px 520px at 80% 20%, rgba(0,229,255,0.14), transparent 60%),
+        radial-gradient(700px 600px at 50% 80%, rgba(255,80,160,0.12), transparent 60%),
+        linear-gradient(180deg, #050509 0%, #07070a 35%, #050509 100%);
+      overflow-x:hidden;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:var(--max); margin:0 auto; padding:24px; }
+
+    /* subtle grid */
+    .grid{
+      position:fixed; inset:0;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: radial-gradient(circle at 50% 20%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0) 78%);
+      pointer-events:none;
+      opacity:0.35;
+    }
+
+    header{
+      position:sticky; top:0;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(7,7,10,0.90), rgba(7,7,10,0.40));
+      border-bottom:1px solid var(--line);
+      z-index:10;
+    }
+
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px;
+      padding:14px 0;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      letter-spacing:0.4px;
+    }
+
+    .logo{
+      width:38px; height:38px; border-radius:12px;
+      background:
+        radial-gradient(12px 12px at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.12) 60%, transparent 70%),
+        linear-gradient(135deg, rgba(124,92,255,1), rgba(0,229,255,0.9));
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 20px 40px rgba(124,92,255,0.15);
+    }
+
+    .brand strong{ font-size:14px; }
+    .brand span{ font-size:12px; color:var(--muted); display:block; margin-top:2px; }
+
+    .links{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+
+    .chip{
+      font-size:12px;
+      padding:9px 12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      border-radius: 999px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .chip:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.24);
+    }
+
+    .hero{
+      padding:56px 0 22px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    @media (max-width: 860px){
+      .hero-grid{ grid-template-columns:1fr; }
+    }
+
+    .card{
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .card-inner{ padding:22px; }
+
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px;
+      color:var(--muted);
+      padding:7px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .dot{
+      width:7px; height:7px; border-radius:99px;
+      background: var(--accent2);
+      box-shadow: 0 0 18px var(--accent2);
+    }
+
+    h1{
+      margin:14px 0 10px;
+      font-size:44px;
+      line-height:1.06;
+      letter-spacing:-0.02em;
+    }
+    @media (max-width: 520px){
+      h1{ font-size:36px; }
+    }
+
+    .sub{
+      font-size:16px;
+      color:var(--muted);
+      line-height:1.5;
+      max-width: 62ch;
+    }
+
+    .cta-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .btn{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:12px 14px;
+      font-weight:600;
+      font-size:14px;
+      background: rgba(255,255,255,0.04);
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,0.30);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .btn.primary{
+      border-color: rgba(124,92,255,0.55);
+      background: linear-gradient(135deg, rgba(124,92,255,0.28), rgba(0,229,255,0.12));
+      box-shadow: 0 0 0 1px rgba(124,92,255,0.16), 0 26px 70px rgba(124,92,255,0.12);
+    }
+
+    .kbd{
+      font-size:12px;
+      color: rgba(255,255,255,0.7);
+      padding:3px 7px;
+      border-radius: 7px;
+      border:1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.25);
+    }
+
+    .mini{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .pill{
+      border:1px solid var(--line);
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    /* right card */
+    .shot{
+      position:relative;
+      min-height: 260px;
+      border-top: 1px solid var(--line);
+      background:
+        radial-gradient(180px 120px at 20% 10%, rgba(255,255,255,0.15), transparent 60%),
+        radial-gradient(260px 180px at 70% 30%, rgba(124,92,255,0.20), transparent 60%),
+        radial-gradient(260px 180px at 50% 80%, rgba(0,229,255,0.10), transparent 55%),
+        linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.35));
+    }
+
+    .shot .placeholder{
+      position:absolute; inset:0;
+      display:grid;
+      place-items:center;
+      padding:18px;
+      text-align:center;
+    }
+
+    .placeholder strong{
+      display:block;
+      font-size:14px;
+      letter-spacing:0.25px;
+    }
+    .placeholder span{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      margin-top:6px;
+      line-height:1.45;
+    }
+
+    .section{
+      padding:26px 0;
+    }
+
+    .section h2{
+      margin:0 0 10px;
+      font-size:18px;
+      letter-spacing: -0.01em;
+    }
+
+    .cols{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    @media (max-width: 860px){
+      .cols{ grid-template-columns:1fr; }
+    }
+
+    .box{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      border-radius: var(--radius);
+      padding:16px;
+    }
+
+    .box h3{
+      margin:0 0 6px;
+      font-size:14px;
+    }
+
+    .box p{
+      margin:0;
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+
+    .form{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+    input{
+      flex: 1 1 220px;
+      padding:12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.25);
+      color: var(--text);
+      outline:none;
+    }
+    input:focus{
+      border-color: rgba(124,92,255,0.7);
+      box-shadow: 0 0 0 3px rgba(124,92,255,0.18);
+    }
+
+    footer{
+      padding:26px 0 42px;
+      color: var(--muted);
+      font-size:12px;
+      border-top:1px solid var(--line);
+    }
+
+    .smalllinks{
+      display:flex; gap:12px; flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .smalllinks a{
+      text-decoration:underline;
+      text-decoration-color: rgba(255,255,255,0.22);
+      text-underline-offset: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grid" aria-hidden="true"></div>
+
+  <header>
+    <div class="wrap">
+      <div class="nav">
+        <a class="brand" href="#top">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <strong>Millennium Online</strong>
+            <span>Independent studio project • Sydney (1999–2000)</span>
+          </div>
+        </a>
+
+        <nav class="links" aria-label="Primary">
+          <a class="chip" href="#about">About</a>
+          <a class="chip" href="#features">Features</a>
+          <a class="chip" href="#media">Media</a>
+          <a class="chip" href="#contact">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="card">
+          <div class="card-inner">
+            <div class="eyebrow"><span class="dot"></span> In development • Coming soon</div>
+            <h1>Rebuild Y2K Sydney.<br/>Live the grind.</h1>
+            <p class="sub">
+              <strong>Millennium Online</strong> is an open-world RPG set in a reimagined 1999–2000 Sydney CBD:
+              quests, skills, commerce, and city life — persistent progression, modern controls, retro soul.
+            </p>
+
+            <div class="cta-row">
+              <!-- Edit these links -->
+              <a class="btn primary" href="#contact">Join updates <span class="kbd">↓</span></a>
+              <a class="btn" href="#media">View screenshots</a>
+              <a class="btn" href="#" onclick="alert('Replace this link with your Discord / socials.'); return false;">Discord</a>
+            </div>
+
+            <div class="mini">
+              <span class="pill">Open world</span>
+              <span class="pill">Skills + commerce</span>
+              <span class="pill">Quests + progression</span>
+              <span class="pill">Y2K aesthetic</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-inner">
+            <h2 style="margin:0 0 8px;">Drop your best 3 screenshots here</h2>
+            <p class="sub" style="font-size:13px;">
+              For now this is a placeholder. Later you’ll replace this with real images or a short trailer embed.
+            </p>
+          </div>
+          <div class="shot" id="media">
+            <div class="placeholder">
+              <div>
+                <strong>MEDIA PLACEHOLDER</strong>
+                <span>
+                  Replace this block with images when you’re ready.<br/>
+                  (Easiest: add 3 JPGs next to this file and use &lt;img&gt; tags.)
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <h2>What is it?</h2>
+      <div class="cols">
+        <div class="box">
+          <h3>Setting</h3>
+          <p>Reimagined Sydney CBD at the turn of the millennium: trains, arcades, office towers, laneways, and late-night city energy.</p>
+        </div>
+        <div class="box">
+          <h3>Gameplay</h3>
+          <p>Questing and progression with a city twist: skills, jobs, commerce, exploration, and reputation.</p>
+        </div>
+        <div class="box">
+          <h3>Vibe</h3>
+          <p>Clean UI, neon hints, low-noise design. Retro without being tacky. Serious-but-fun.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <h2>Planned features</h2>
+      <div class="cols">
+        <div class="box"><h3>Quest system</h3><p>Structured questlines, repeatables, and city-style errands that build into larger arcs.</p></div>
+        <div class="box"><h3>Skills</h3><p>Trainable skills that unlock routes, income, and access — not just combat stats.</p></div>
+        <div class="box"><h3>Commerce</h3><p>Buy/sell, craft, trade, and hustle. The city is the economy.</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <h2>Get updates</h2>
+      <div class="box">
+        <p style="margin:0; color:var(--muted); font-size:13px; line-height:1.55;">
+          Add your email here. This demo form doesn’t submit anywhere yet — later you can connect it to Mailchimp,
+          Buttondown, ConvertKit, etc.
+        </p>
+
+        <form class="form" onsubmit="return fakeSubmit(event)">
+          <input id="email" type="email" placeholder="you@email.com" required />
+          <button class="btn primary" type="submit">Notify me</button>
+        </form>
+
+        <div class="mini" style="margin-top:10px;">
+          <span class="pill">No spam</span>
+          <span class="pill">Unsubscribe anytime</span>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>
+        © <span id="year"></span> <span id="studioName">Your Studio Name</span>. All rights reserved.
+      </div>
+      <div class="smalllinks">
+        <!-- Edit these -->
+        <a href="#" onclick="alert('Replace with your socials link.'); return false;">Twitter/X</a>
+        <a href="#" onclick="alert('Replace with your YouTube link.'); return false;">YouTube</a>
+        <a href="mailto:hello@yourdomain.com">hello@yourdomain.com</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Edit these:
+    const STUDIO_NAME = "Your Studio Name";
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+    document.getElementById("studioName").textContent = STUDIO_NAME;
+
+    function fakeSubmit(e){
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      alert("Nice. Later we’ll wire this to a mailing list tool.\n\nCaptured: " + email);
+      e.target.reset();
+      return false;
+    }
+  </script>
+</body>
+</html>
